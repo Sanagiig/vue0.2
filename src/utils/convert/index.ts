@@ -4,6 +4,9 @@ import { cached } from "../helper/index";
  * Get the raw type string of a value, e.g., [object Object].
  */
 const _toString = Object.prototype.toString
+export function toRawType (value: any): string {
+  return _toString.call(value).slice(8, -1)
+}
 
 /**
  * Convert an Array-like object to a real Array.

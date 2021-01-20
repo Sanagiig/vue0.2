@@ -1,5 +1,7 @@
-import { isObject,isXlink } from "../assert/index";
+import { isObject, isXlink } from "../assert/index";
 import { warn } from "../debug/index";
+import  VNode  from "@core/vdom/vnode";
+export const emptyNode: any = new VNode("", {}, []);
 
 /**
  * Perform no operation.
@@ -12,6 +14,11 @@ export function noop(a?: any, b?: any, c?: any): any { };
  * Always return false.
  */
 export const no = (a?: any, b?: any, c?: any) => false
+
+/**
+ * Return the same value.
+ */
+export const identity = (_: any) => _;
 
 /**
  * Define a property.
@@ -146,4 +153,14 @@ export function once(fn: Function): Function {
 
 export const getXlinkProp = (name: string): string => {
   return isXlink(name) ? name.slice(6, name.length) : ''
+}
+
+
+/**
+ * Generate a string containing static keys from compiler modules.
+ */
+export function genStaticKeys(modules: Array<ModuleOptions>): string {
+  return modules.reduce((keys, m: any) => {
+    return keys.concat(m.staticKeys || [])
+  }, []).join(',')
 }

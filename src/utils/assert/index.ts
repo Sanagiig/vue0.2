@@ -260,11 +260,6 @@ export const emptyObject = Object.freeze({});
 // can we use __proto__?
 export const hasProto = '__proto__' in {};
 
-/**
- * Return the same value.
- */
-export const identity = (_: any) => _;
-
 // this needs to be lazy-evaled because vue may be required before
 // vue-server-renderer can set VUE_ENV
 let _isServer: any
@@ -301,3 +296,14 @@ function getShouldDecode (href: boolean): boolean {
 export const shouldDecodeNewlines = inBrowser ? getShouldDecode(false) : false
 // #6828: chrome encodes content in a[href]
 export const shouldDecodeNewlinesForHref = inBrowser ? getShouldDecode(true) : false
+
+// attributes that should be using props for binding
+const acceptValue = makeMap('input,textarea,option,select,progress')
+export const mustUseProp = (tag: string, type: string, attr: string): boolean => {
+  return (
+    (attr === 'value' && acceptValue(tag)) && type !== 'button' ||
+    (attr === 'selected' && tag === 'option') ||
+    (attr === 'checked' && tag === 'input') ||
+    (attr === 'muted' && tag === 'video')
+  )
+}

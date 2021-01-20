@@ -38,7 +38,7 @@ declare type WatcherOption = {
     // 是否用户创建
     user?: boolean;
     // 是否立即cb
-    imediate?: boolean;
+    immediate?: boolean;
     deep?: boolean;
     lazy?: boolean;
     sync?: boolean;

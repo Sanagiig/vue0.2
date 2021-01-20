@@ -47,13 +47,13 @@ declare type CompiledResult = {
 declare type ModuleOptions = {
   // transform an AST node before any attributes are processed
   // returning an ASTElement from pre/transforms replaces the element
-  preTransformNode: (el: ASTElement) => ASTElement;
+  preTransformNode?: (el: ASTElement) => ASTElement;
   // transform an AST node after built-ins like v-if, v-for are processed
-  transformNode: (el: ASTElement) => ASTElement;
+  transformNode?: (el: ASTElement) => ASTElement;
   // transform an AST node after its children have been processed
   // cannot return replacement in postTransform because tree is already finalized
-  postTransformNode: (el: ASTElement) => void;
-  genData: (el: ASTElement) => string; // generate extra data string for an element
+  postTransformNode?: (el: ASTElement) => void;
+  genData?: (el: ASTElement) => string; // generate extra data string for an element
   transformCode?: (el: ASTElement, code: string) => string; // further transform generated code for an element
   staticKeys?: Array<string>; // AST properties to be considered static
 };
@@ -226,3 +226,12 @@ declare type SFCBlock = {
   scoped?: boolean;
   module?: string | boolean;
 };
+
+// 编译fn
+type CompileFn = (template: string,options?: CompilerOptions) => CompiledResult;
+// 编译fn 转 render fn
+type CompileFnToRender = (compile:CompileFn) => Function;
+declare type CreateCompilerResult = {
+  compile:CompileFn,
+  compileToFunctions:CompileFnToRender
+}
