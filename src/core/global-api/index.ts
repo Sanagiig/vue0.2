@@ -1,4 +1,4 @@
-import config from "@config/index";
+import config from "@core/config";
 import { initUse } from './use'
 import { initMixin } from './mixin'
 import { initExtend } from './extend'

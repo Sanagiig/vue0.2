@@ -17,7 +17,7 @@ declare type CompilerOptions = {
   expectHTML?: boolean; // only false for non-web builds
   isFromDOM?: boolean;
   shouldDecodeTags?: boolean;
-  shouldDecodeNewlines?:  boolean;
+  shouldDecodeNewlines?: boolean;
   shouldDecodeNewlinesForHref?: boolean;
   outputSourceRange?: boolean;
 
@@ -43,6 +43,11 @@ declare type CompiledResult = {
   errors?: Array<string | WarningMessage>;
   tips?: Array<string | WarningMessage>;
 };
+
+declare type CompiledToFnResult = {
+  render:Function;
+  staticRenderFns:Function[];
+}
 
 declare type ModuleOptions = {
   // transform an AST node before any attributes are processed
@@ -218,7 +223,7 @@ declare type SFCDescriptor = {
 declare type SFCBlock = {
   type: string;
   content: string;
-  attrs: {[attribute:string]: string};
+  attrs: { [attribute: string]: string };
   start?: number;
   end?: number;
   lang?: string;
@@ -228,10 +233,10 @@ declare type SFCBlock = {
 };
 
 // 编译fn
-type CompileFn = (template: string,options?: CompilerOptions) => CompiledResult;
+type CompileFn = (template: string, options?: CompilerOptions) => CompiledResult;
 // 编译fn 转 render fn
-type CompileFnToRender = (compile:CompileFn) => Function;
+type CompileFnToRender = (compile: CompileFn) => Function;
 declare type CreateCompilerResult = {
-  compile:CompileFn,
-  compileToFunctions:CompileFnToRender
+  compile: CompileFn,
+  compileToFunctions: CompileFnToRender
 }

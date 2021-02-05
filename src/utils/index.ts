@@ -7,3 +7,6 @@ export * from "./mixin/index";
 export * from "./next-tick/index";
 export * from "./error/index";
 export * from "./options/index";
+export * from "./props/index";
+export * from "./parser/index";
+export * from "./lang/index";

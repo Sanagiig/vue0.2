@@ -134,7 +134,7 @@ export function mergeOptions(
   }
 
   if (typeof child === 'function') {
-    child = child.options
+    child = child.options;
   }
 
   normalizeProps(child, vm);
@@ -169,7 +169,7 @@ export function mergeOptions(
   }
   function mergeField(key: keyof ComponentOptions) {
     const strat = strats[key] || defaultStrat
-    options[key] = strat(parent[key], child[key], vm, key)
+    options[key] = strat(parent[key], (<ComponentOptions>child)[key], vm, key)
   }
   return parent;
 }

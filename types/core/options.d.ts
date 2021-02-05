@@ -80,6 +80,7 @@ declare type ComponentOptions = {
   // private
   // 标记是否组件
   _isComponent?: boolean;
+  // 缓存 options.props 的key
   _propKeys?: string[];
   _parentVnode?: VNodeInstance;
   _parentListeners?: Object;

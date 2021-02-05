@@ -9,12 +9,13 @@ declare interface ComponentCtor {
   new(options: ComponentOptions): Component;
   options: ComponentOptions;
   // 父构造函数
-  super ?:ComponentCtor;
+  super?: ComponentCtor;
   /**
    * 扩展相关
    */
   // 注册插件，会将this 与接受 N 个参数组成args, 确定ctx 调用 plugin.install(...args)
   use: (plugin: Function | Object | any, ...restArgs: any) => void;
+  mixin: (mixin: ComponentOptions) => ComponentCtor;
   // 构件
   extend: (this: ComponentCtor, extendOptions: ComponentOptions) => Function;
   // 内部调用 observer
@@ -41,17 +42,18 @@ declare interface ComponentCtor {
 declare interface Component {
   constructor: ComponentCtor;
 
-  cid:number | null;
+  cid: number | null;
   // ???
-  options?:ComponentOptions;
+  options?: ComponentOptions;
   /**
    * public properties
    */
   // this._data
-  $data:any;
+  $data: any;
   // this._props
-  $props:any;
-  $el: Element;
+  $props: any;
+  // element.__vue__
+  $el: Element | any;
   $children: Component[];
   $options: ComponentOptions;
   $on: Function;
@@ -64,12 +66,14 @@ declare interface Component {
   $set: (target: Array<any> | any, key: string, val: any) => any;
   $delete: (target: Array<any> | any, key: string) => any;
   // 父组件实例
+  // ???
   $parent?: Component;
   // 根节点实例
   $root: Component;
   $refs: { [key: string]: any };
   $slots: VNodeInstance[];
   $scopedSlots: { [key: string]: VNodeInstance };
+  // ???
   $vnode?: VNodeInstance | void; // the placeholder node for the component in parent's render tree
   $createElement: (a: any, b: any, c: any, d: any) => Function;
 
@@ -81,7 +85,7 @@ declare interface Component {
   // ob 对象
   __ob__: any;
   // 当前 vm
-  _self:Component;
+  _self: Component;
   _data: { [key: string]: any };
   _props: { [key: string]: any };
   // provide obj
@@ -110,11 +114,16 @@ declare interface Component {
   _computedWatchers: WatcherInstance[];
   // 已安装的插件
   _installedPlugins: any[];
+  // ???
+  _vnode:VNodeInstance;
   _update: Function;
+  // option.render 确定 $vnode
+  _render: Function;
+  __patch__:Function;
   // 初始化initLifecycle initEvents initRender callHook(beforeCreate)
   // initInjections initState initProvide callHook(created)
   // vm.$mount
-  _init:(options?: ComponentOptions) =>{}
+  _init: (options?: ComponentOptions) => {}
   // createElement
 
   // _c is internal that accepts `normalizationType` optimization hint

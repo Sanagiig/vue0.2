@@ -26,8 +26,9 @@ declare interface SimpleSet {
 }
 
 // option.render
-declare type OptionRender = {
+declare interface OptionRender  {
   (h: () => VNodeInstance, c?: any): VNodeInstance;
+  (text?: string): VNodeInstance;
   // 判断 proxy 处理 get 还是 has
-  _withStripped:any;
+  _withStripped?: any;
 }
