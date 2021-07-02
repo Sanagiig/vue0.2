@@ -13,7 +13,7 @@ let baseIO;
 switch (target) {
     case 'full': {
         baseIO = {
-            input: 'src/platform/entry/with-compiler.ts',
+            input: 'src/platform/web/entry/runtime-with-compiler.ts',
             output: {
                 sourcemap: true,
                 file: 'test/full/dist.js',

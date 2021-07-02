@@ -3,7 +3,7 @@ import config from "@core/config";
 import { isBuiltInTag, isPlainObject } from "../assert/index";
 import { unicodeLetters } from "../lang/index";
 import { warn } from "../debug/index";
-import { hasOwn, camelize, toRawType, extend } from "@utils/index";
+import { hasOwn, camelize, toRawType, extend,capitalize } from "@utils/index";
 
 /**
  * Option overwriting strategies are functions that handle
@@ -114,7 +114,7 @@ function normalizeDirectives(options: ComponentOptions, vm?: Component) {
 /**
  * Default strategy.
  */
-const defaultStrat = function (parentVal: any, childVal: any): any {
+const defaultStrat = function (parentVal: any, childVal: any,vm?:Component, key?:string | number): any {
   return childVal === undefined
     ? parentVal
     : childVal
@@ -171,7 +171,7 @@ export function mergeOptions(
     const strat = strats[key] || defaultStrat
     options[key] = strat(parent[key], (<ComponentOptions>child)[key], vm, key)
   }
-  return parent;
+  return options;
 }
 
 export function validateComponentName(name: string) {
@@ -187,5 +187,38 @@ export function validateComponentName(name: string) {
       'id: ' + name
     )
   }
+}
+
+/**
+ * Resolve an asset.
+ * This function is used because child instances need access
+ * to assets defined in its ancestor chain.
+ */
+export function resolveAsset (
+  options: Object,
+  type: string,
+  id: string,
+  warnMissing?: boolean
+): any {
+  /* istanbul ignore if */
+  if (typeof id !== 'string') {
+    return
+  }
+  const assets = options[type]
+  // check local registration variations first
+  if (hasOwn(assets, id)) return assets[id]
+  const camelizedId = camelize(id)
+  if (hasOwn(assets, camelizedId)) return assets[camelizedId]
+  const PascalCaseId = capitalize(camelizedId)
+  if (hasOwn(assets, PascalCaseId)) return assets[PascalCaseId]
+  // fallback to prototype chain
+  const res = assets[id] || assets[camelizedId] || assets[PascalCaseId]
+  if (process.env.NODE_ENV !== 'production' && warnMissing && !res) {
+    warn(
+      'Failed to resolve ' + type.slice(0, -1) + ': ' + id,
+      options
+    )
+  }
+  return res
 }
 

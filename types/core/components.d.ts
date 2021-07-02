@@ -7,6 +7,7 @@ type ComponentCtorUtil = {
 
 declare interface ComponentCtor {
   new(options: ComponentOptions): Component;
+  cid:number;
   options: ComponentOptions;
   // 父构造函数
   super?: ComponentCtor;
@@ -115,7 +116,7 @@ declare interface Component {
   // 已安装的插件
   _installedPlugins: any[];
   // ???
-  _vnode:VNodeInstance;
+  _vnode:VNodeWithData | VNodeInstance;
   _update: Function;
   // option.render 确定 $vnode
   _render: Function;
@@ -155,13 +156,19 @@ declare interface Component {
   // renderList
   _l: (val: any, render: RenderFn) => Array<VNodeInstance>;
   // renderSlot
-  _t: (name: string, fallback: Array<VNodeInstance>, props: any, bindObject: any) => Array<VNodeInstance>;
+  _t: (name: string, fallback: Array<VNodeInstance>, props: any, bindObject: any) => Array<VNodeInstance> | void;
   // apply v-bind object
   _b: (data: any, tag: string, value: any, asProp: boolean, isSync?: boolean) => VNodeData;
   // apply v-on object
   _g: (data: any, value: any) => VNodeData;
   // check custom keyCode
-  _k: (eventKeyCode: number, key: string, builtInAlias?: number | Array<number>, eventKeyName?: string, builtInKeyName?: string | Array<string>) => boolean | undefined;
+  _k: (
+    eventKeyCode: number,
+    key: string,
+    builtInKeyCode?: number | Array<number>,
+    eventKeyName?: string,
+    builtInKeyName?: string | Array<string>
+  ) => boolean | void;
   // resolve scoped slots
   _u: (scopedSlots: ScopedSlotsData, res?: any) => { [key: string]: Function };
 

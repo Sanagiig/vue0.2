@@ -168,7 +168,7 @@ export function getRawBindingAttr(
 export function pluckModuleFunction(
   modules?: Array<Object>,
   key?: string
-): Array<Function> {
+): any[] {
   return modules
     ? modules.map(m => m[key]).filter(_ => _)
     : []

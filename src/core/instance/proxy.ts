@@ -1,5 +1,5 @@
 
-import config from 'core/config'
+import config from '@core/config'
 import { warn, makeMap, isNative } from '@utils/index'
 
 let initProxy:any;

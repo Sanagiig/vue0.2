@@ -63,4 +63,4 @@ declare type ComputedOption = {
     cache: boolean;
     get: () => any;
     set: (v: any) => void;
-}
+} | Function;

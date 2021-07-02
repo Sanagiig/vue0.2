@@ -159,7 +159,7 @@ export const getXlinkProp = (name: string): string => {
 /**
  * Generate a string containing static keys from compiler modules.
  */
-export function genStaticKeys(modules: Array<ModuleOptions>): string {
+export function genStaticKeys(modules: ModuleOptions[]): string {
   return modules.reduce((keys, m: any) => {
     return keys.concat(m.staticKeys || [])
   }, []).join(',')

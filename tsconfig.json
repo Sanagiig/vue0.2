@@ -48,6 +48,7 @@
     /* Base directory to resolve non-absolute module names. */
     "paths": {
       "@core/*": ["src/core/*"],
+      "@compiler/*": ["src/compiler/*"],
       "@platform/*": ["src/platform/*"],
       "@web/*": ["src/platform/web/*"],
       "@utils/*": ["src/utils/*"],

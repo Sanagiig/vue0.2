@@ -1,6 +1,6 @@
 declare type CompilerOptions = {
   warn?: Function; // allow customizing warning in different environments; e.g. node
-  modules?: Array<ModuleOptions>; // platform specific modules; e.g. style; class
+  modules?: ModuleOptions[]; // platform specific modules; e.g. style; class
   directives?: { [key: string]: Function }; // platform specific directives
   staticKeys?: string; // a list of AST properties to be considered static; for optimization
   isUnaryTag?: (tag: string) => boolean | void; // check if a tag is unary for the platform
@@ -29,6 +29,21 @@ declare type CompilerOptions = {
   scopeId?: string;
 };
 
+declare type parseHTMLOptions = {
+  warn: Function;
+  expectHTML?: boolean;
+  isUnaryTag?: (tag: string) => boolean | void;
+  canBeLeftOpenTag: Function;
+  shouldDecodeNewlines?: boolean;
+  shouldDecodeNewlinesForHref?: boolean;
+  shouldKeepComment?: boolean;
+  outputSourceRange?: boolean;
+  start: (tag, attrs, unary, start,end) => void;
+  end: (tag, start, end) => void;
+  chars: (text: string, start?: number, end?: number) => void;
+  comment: (text: string, start, end) => void;
+}
+
 declare type WarningMessage = {
   msg: string;
   start?: number;
@@ -45,8 +60,8 @@ declare type CompiledResult = {
 };
 
 declare type CompiledToFnResult = {
-  render:Function;
-  staticRenderFns:Function[];
+  render: Function;
+  staticRenderFns: Function[];
 }
 
 declare type ModuleOptions = {
@@ -126,6 +141,7 @@ declare type ASTElement = {
   // 标签中 slot 属性
   slotTarget?: string;
   // <template> scope 或 slot-scope 属性
+  // name = el.slotTarget 挂载到  parent.scopedSlots[name] = el;
   slotScope?: string;
   // 如果子节点存在 $slot 则存在改属性 ， 
   // 其 name 为 slotTarget , val 为一个空的 template 
@@ -170,6 +186,7 @@ declare type ASTElement = {
   once?: true;
   onceProcessed?: boolean;
   wrapData?: (code: string) => string;
+  // 当前 v-on = obj
   wrapListeners?: (code: string) => string;
 
   // 2.4 ssr optimization
@@ -208,6 +225,19 @@ declare type ASTText = {
   // 2.6 $slot check
   has$Slot?: boolean
 };
+
+declare type TagAttr = RegExpMatchArray & {
+  start: number;
+  end: number;
+}
+
+declare type StartTagMatch = {
+  tagName: string;
+  attrs: TagAttr[];
+  start: number;
+  end: number;
+  unarySlash?:boolean;
+}
 
 // SFC-parser related declarations
 

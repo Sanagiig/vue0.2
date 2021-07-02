@@ -1,11 +1,44 @@
 import { cached } from "../helper/index";
-
+import { isPlainObject, extend } from "@utils/index"
 /**
  * Get the raw type string of a value, e.g., [object Object].
  */
 const _toString = Object.prototype.toString
-export function toRawType (value: any): string {
+export function toRawType(value: any): string {
   return _toString.call(value).slice(8, -1)
+}
+
+/**
+ * Merge an Array of Objects into a single Object.
+ */
+export function toObject(arr: Array<any>): Object {
+  const res = {}
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i]) {
+      extend(res, arr[i])
+    }
+  }
+  return res
+}
+
+/**
+ * Convert a value to a string that is actually rendered.
+ */
+export function toString(val: any): string {
+  return val == null
+    ? ''
+    : Array.isArray(val) || (isPlainObject(val) && val.toString === _toString)
+      ? JSON.stringify(val, null, 2)
+      : String(val)
+}
+
+/**
+   * Convert an input value to a number for persistence.
+   * If the conversion fails, return original string.
+   */
+export function toNumber(val) {
+  var n = parseFloat(val);
+  return isNaN(n) ? val : n
 }
 
 /**
@@ -48,7 +81,7 @@ export const hyphenate = cached((str: string): string => {
  * Make a map and return a function for checking if a key
  * is in that map.
  */
-export function makeMap (
+export function makeMap(
   str: string,
   expectsLowerCase?: boolean
 ): (key: string) => boolean | void {

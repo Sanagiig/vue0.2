@@ -6,7 +6,7 @@ import { initAssetRegisters } from './assets'
 import { set, del } from '../observer/index'
 import { ASSET_TYPES } from '@utils/index'
 import builtInComponents from '../components/index'
-import { observe } from 'core/observer/index'
+import { observe,defineReactive } from '@core/observer/index'
 
 import {
   warn,
@@ -14,7 +14,6 @@ import {
   nextTick,
   mergeOptions,
 } from '@utils/index'
-import {defineReactive} from "@core/observer/index"
 
 export function initGlobalAPI(Vue: GlobalAPI) {
   // config

@@ -1,11 +1,16 @@
 import { no, noop, identity, LIFECYCLE_HOOKS } from '@utils/index';
 
-const config = {
+export default {
     /**
     * Option merge strategies (used in core/util/options)
     */
     // $flow-disable-line
-    optionMergeStrategies: <{ [key: string]: Function }>{},
+    optionMergeStrategies: <{
+        [key: string]:
+        (parent: ComponentOptions,
+            child: ComponentOptions | ComponentCtor,
+            vm?: Component) => any
+    }>{},
 
     /**
      * Whether to suppress warnings.
@@ -92,5 +97,3 @@ const config = {
      */
     _lifecycleHooks: LIFECYCLE_HOOKS
 }
-
-export default config;

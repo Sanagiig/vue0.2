@@ -20,13 +20,7 @@ declare type ComponentOptions = {
   data?: Object | Function;
   props?: { [key: string]: PropOptions };
   propsData?: any;
-  computed?: {
-    [key: string]: Function | {
-      get?: Function;
-      set?: Function;
-      cache?: boolean
-    }
-  };
+  computed?: ComputedOption;
   methods?: { [key: string]: Function };
   watch?: { [key: string]: Function | string };
 
@@ -93,6 +87,7 @@ declare type ComponentOptions = {
   _Ctor?: { [key: string]: any };
   // 指定vue文件路径
   __file?: any;
+  [key: string]: any;
 }
 
 declare type PropOptions = {
