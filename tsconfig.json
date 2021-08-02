@@ -51,6 +51,7 @@
       "@compiler/*": ["src/compiler/*"],
       "@platform/*": ["src/platform/*"],
       "@web/*": ["src/platform/web/*"],
+      "@shared/*": ["src/shared/*"],
       "@utils/*": ["src/utils/*"],
       "@vdom/*": ["src/core/vdom/*"],
       "@observer/*": ["src/core/observer/*"],

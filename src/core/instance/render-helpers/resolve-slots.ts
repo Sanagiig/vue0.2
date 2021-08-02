@@ -4,7 +4,7 @@ import type VNode from 'core/vdom/vnode'
  * Runtime helper for resolving raw children VNodes into a slot object.
  */
 export function resolveSlots(
-  children: Array<VNode>,
+  children: Array<VNodeInstance> | undefined,
   context: Component
 ): Slots {
   if (!children || !children.length) {

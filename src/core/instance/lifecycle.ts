@@ -1,7 +1,7 @@
 import config from "@config/index";
 import { pushTarget, popTarget } from "@core/observer/dep";
-import { invokeWithErrorHandling,warn,noop} from "@utils/index";
-import {createEmptyVNode} from "@vdom/vnode";
+import { invokeWithErrorHandling, warn, noop,remove } from "@utils/index";
+import { createEmptyVNode } from "@vdom/vnode";
 import Watcher from "@observer/watcher"
 
 // ???
@@ -49,9 +49,55 @@ export function lifecycleMixin(Vue: ComponentCtor) {
     // updated in a parent's updated hook.
   }
 
-  Vue.prototype.$forceUpdate = function () { }
+  Vue.prototype.$forceUpdate = function () {
+    const vm: Component = this
+    if (vm._watcher) {
+      vm._watcher.update()
+    }
+  }
 
-  Vue.prototype.$destroy = function () { }
+  Vue.prototype.$destroy = function () {
+    const vm: Component = this
+    if (vm._isBeingDestroyed) {
+      return
+    }
+    callHook(vm, 'beforeDestroy')
+    vm._isBeingDestroyed = true
+    // remove self from parent
+    const parent = vm.$parent
+    if (parent && !parent._isBeingDestroyed && !vm.$options.abstract) {
+      remove(parent.$children, vm)
+    }
+    // teardown watchers
+    if (vm._watcher) {
+      vm._watcher.teardown()
+    }
+    let i = vm._watchers.length
+    while (i--) {
+      vm._watchers[i].teardown()
+    }
+    // remove reference from data ob
+    // frozen object may not have observer.
+    if (vm._data.__ob__) {
+      vm._data.__ob__.vmCount--
+    }
+    // call the last hook...
+    vm._isDestroyed = true
+    // invoke destroy hooks on current rendered tree
+    vm.__patch__(vm._vnode, null)
+    // fire destroyed hook
+    callHook(vm, 'destroyed')
+    // turn off all instance listeners.
+    vm.$off()
+    // remove __vue__ reference
+    if (vm.$el) {
+      vm.$el.__vue__ = null
+    }
+    // release circular reference (#6759)
+    if (vm.$vnode) {
+      vm.$vnode.parent = null
+    }
+  }
 
 }
 
@@ -72,8 +118,9 @@ export function initLifecycle(vm: Component) {
 
   vm.$children = []
   vm.$refs = {}
-
   vm._watcher = null
+
+  // 当前vm 失效状态
   vm._inactive = null
   vm._directInactive = false
   vm._isMounted = false
@@ -81,9 +128,9 @@ export function initLifecycle(vm: Component) {
   vm._isBeingDestroyed = false
 }
 
-export function mountComponent (
+export function mountComponent(
   vm: Component,
-  el ?: Element,
+  el?: Element,
   hydrating?: boolean
 ): Component {
   vm.$el = el;
@@ -112,22 +159,22 @@ export function mountComponent (
   let updateComponent;
   /* istanbul ignore if */
   // if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
-    // updateComponent = () => {
-    //   const name = vm._name
-    //   const id = vm._uid
-    //   const startTag = `vue-perf-start:${id}`
-    //   const endTag = `vue-perf-end:${id}`
+  // updateComponent = () => {
+  //   const name = vm._name
+  //   const id = vm._uid
+  //   const startTag = `vue-perf-start:${id}`
+  //   const endTag = `vue-perf-end:${id}`
 
-    //   mark(startTag)
-    //   const vnode = vm._render()
-    //   mark(endTag)
-    //   measure(`vue ${name} render`, startTag, endTag)
+  //   mark(startTag)
+  //   const vnode = vm._render()
+  //   mark(endTag)
+  //   measure(`vue ${name} render`, startTag, endTag)
 
-    //   mark(startTag)
-    //   vm._update(vnode, hydrating)
-    //   mark(endTag)
-    //   measure(`vue ${name} patch`, startTag, endTag)
-    // }
+  //   mark(startTag)
+  //   vm._update(vnode, hydrating)
+  //   mark(endTag)
+  //   measure(`vue ${name} patch`, startTag, endTag)
+  // }
   // } else {
   //   updateComponent = () => {
   //     vm._update(vm._render(), hydrating)
@@ -141,7 +188,7 @@ export function mountComponent (
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
   new Watcher(vm, updateComponent, noop, {
-    before () {
+    before() {
       if (vm._isMounted && !vm._isDestroyed) {
         callHook(vm, 'beforeUpdate')
       }

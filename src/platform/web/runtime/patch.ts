@@ -6,6 +6,6 @@ import platformModules from './modules/index'
 
 // the directive module should be applied last, after all
 // built-in modules have been applied.
-const modules = platformModules.concat(baseModules)
+const modules = platformModules.concat(<any[]>baseModules)
 
 export const patch: Function = createPatchFunction({ nodeOps, modules })

@@ -9,7 +9,8 @@ export default {
         [key: string]:
         (parent: ComponentOptions,
             child: ComponentOptions | ComponentCtor,
-            vm?: Component) => any
+            vm?: Component,
+            key ?:string) => any
     }>{},
 
     /**

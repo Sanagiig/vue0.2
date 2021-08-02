@@ -62,7 +62,11 @@ declare interface Component {
   $once: (event: string, fn: Function) => Component;
   $off: Function;
   $emit: Function;
-  $watch: Function;
+  $watch: (
+    expOrFn: string | Function,
+    cb: any,
+    options?: WatcherOption
+  ) => () => void; //unwatch;
   $mount: Function;
   $set: (target: Array<any> | any, key: string, val: any) => any;
   $delete: (target: Array<any> | any, key: string) => any;
@@ -72,11 +76,11 @@ declare interface Component {
   // 根节点实例
   $root: Component;
   $refs: { [key: string]: any };
-  $slots: VNodeInstance[];
+  $slots: Slots;
   $scopedSlots: { [key: string]: VNodeInstance };
   // ???
   $vnode?: VNodeInstance | void; // the placeholder node for the component in parent's render tree
-  $createElement: (a: any, b: any, c: any, d: any) => Function;
+  $createElement: (a: any, b: any, c: any, d: any) => VNodeInstance | VNodeInstance[] | void;
 
   /**
    * private properties
@@ -118,6 +122,8 @@ declare interface Component {
   // ???
   _vnode:VNodeWithData | VNodeInstance;
   _update: Function;
+  // 强制调用 vm._watcher.update() 更新视图
+  $forceUpdate:() => void
   // option.render 确定 $vnode
   _render: Function;
   __patch__:Function;
@@ -133,7 +139,7 @@ declare interface Component {
     data?: VNodeData,
     children?: VNodeChildren,
     normalizationType?: number
-  ) => VNodeInstance | void;
+  ) => VNodeInstance | VNodeInstance[] | void;
 
   // renderStatic
   _m: (index: number, isInFor?: boolean) => VNodeInstance | VNodeChildren;

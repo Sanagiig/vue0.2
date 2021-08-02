@@ -24,4 +24,5 @@ export function installRenderHelpers(target: Component) {
   target._k = checkKeyCodes;
   target._i = looseIndexOf;
   target._q = looseEqual;
+  target._u = resolveScopedSlots
 }

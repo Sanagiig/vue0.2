@@ -88,7 +88,7 @@ export function stateMixin(Vue: ComponentCtor) {
 
   Vue.prototype.$set = set;
   Vue.prototype.$delete = del;
-
+  
   Vue.prototype.$watch = function (
     expOrFn: string | Function,
     cb: any,

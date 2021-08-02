@@ -78,7 +78,7 @@ declare type ComponentOptions = {
   _propKeys?: string[];
   _parentVnode?: VNodeInstance;
   _parentListeners?: Object;
-  _renderChildren?: VNodeInstance[];
+  _renderChildren: VNodeInstance[] | undefined;
   _componentTag: string;
   _scopeId: string;
   // Vue 构造函数

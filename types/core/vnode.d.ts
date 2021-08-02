@@ -1,6 +1,6 @@
-declare interface VNodeCtor{
-  new (
-    tag?: string| void,
+declare interface VNodeCtor {
+  new(
+    tag?: string | void,
     data?: VNodeData,
     children?: Array<VNodeInstance>,
     text?: string,
@@ -8,15 +8,15 @@ declare interface VNodeCtor{
     context?: Component,
     componentOptions?: VNodeComponentOptions,
     asyncFactory?: Function
-  ) :VNodeInstance;
+  ): VNodeInstance;
 }
 
 declare interface VNodeInstance {
   tag?: string;
   data?: VNodeData;
-  child?:Component;
+  child?: Component;
   children?: Array<VNodeInstance>;
-  text?: string  ;
+  text?: string;
   elm?: Element;
   ns?: string;
   context?: Component; // rendered in this component's scope
@@ -42,6 +42,11 @@ declare interface VNodeInstance {
   fnScopeId?: string; // functional scope id support
 }
 
+declare type VNodeHooks = ['create', 'activate', 'update', 'remove', 'destroy']
+declare type HookHandler = {
+  (...args:any[]):any;
+  merged?:boolean;
+}
 declare type VNodeData = {
   key?: string | number;
   slot?: string;
@@ -57,10 +62,12 @@ declare type VNodeData = {
   props?: { [key: string]: any };
   attrs?: { [key: string]: string };
   domProps?: { [key: string]: any };
-  hook?: { [key: string]: Function };
+  hook?: { [key in keyof VNodeHooks]: HookHandler};
   on?: { [key: string]: Function | Array<Function> };
   // mark
-  init?:any;
+  init?: any;
+  // 待插入的vnodes , 初始化插入非根节点时会将子节点存入其中
+  pendingInsert?: VNodeInstance[];
   nativeOn?: { [key: string]: Function | Array<Function> };
   transition?: any;
   show?: boolean; // marker for v-show
@@ -75,13 +82,14 @@ declare type VNodeData = {
     value: any;
     callback: Function;
   };
-  moved?:boolean;
+  refInFor?: boolean;
+  moved?: boolean;
 }
 
 // interface for vnodes in update modules
 declare type VNodeWithData = {
-  tag: string;
-  data: VNodeData;
+  tag?: string;
+  data?: VNodeData;
   children: Array<VNodeInstance>;
   text: void;
   elm: any;
@@ -107,7 +115,7 @@ declare type VNodeChildren = Array<VNodeInstance | string> | string;
 declare type VNodeDirective = {
   name: string;
   rawName: string;
-  value?: any; 
+  value?: any;
   oldValue?: any;
   arg?: string;
   modifiers?: ASTModifiers;

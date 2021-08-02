@@ -11,18 +11,19 @@ const target = 'full';
 let baseIO;
 
 switch (target) {
-    case 'full': {
-        baseIO = {
-            input: 'src/platform/web/entry/runtime-with-compiler.ts',
-            output: {
-                sourcemap: true,
-                file: 'test/full/dist.js',
-                name: 'Vvue',
-                format: 'umd',
-            },
+    case 'full':
+        {
+            baseIO = {
+                input: 'src/platform/web/entry/runtime-with-compiler.ts',
+                output: {
+                    sourcemap: true,
+                    file: 'test/full/dist.js',
+                    name: 'Vvue',
+                    format: 'umd',
+                },
+            }
+            break;
         }
-        break;
-    }
     case 'ob':
         baseIO = {
             input: 'test/observer/index.ts',
