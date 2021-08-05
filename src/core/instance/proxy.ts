@@ -1,6 +1,6 @@
 
 import config from '@core/config'
-import { warn, makeMap, isNative } from '@utils/index'
+import { warn, makeMap, isNative } from '@core/utils/index'
 
 let initProxy:any;
 if (process.env.NODE_ENV !== 'production') {

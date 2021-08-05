@@ -70,6 +70,17 @@ export function createPatchFunction(backend: Backend): Function {
     return new VNode(nodeOps.tagName(elm).toLowerCase(), {}, [], undefined, elm)
   }
 
+  function createRmCb (childElm, listeners) {
+    function remove () {
+      if (--remove.listeners === 0) {
+        removeNode(childElm)
+      }
+    }
+    remove.listeners = listeners
+    return remove
+  }
+
+
   function isUnknownElement(vnode, inVPre) {
     return (
       !inVPre &&
@@ -174,6 +185,35 @@ export function createPatchFunction(backend: Backend): Function {
     }
   }
 
+  function removeAndInvokeRemoveHook (vnode, rm ?: any) {
+    if (isDef(rm) || isDef(vnode.data)) {
+      let i
+      const listeners = cbs.remove.length + 1
+      if (isDef(rm)) {
+        // we have a recursively passed down rm callback
+        // increase the listeners count
+        rm.listeners += listeners
+      } else {
+        // directly removing
+        rm = createRmCb(vnode.elm, listeners)
+      }
+      // recursively invoke hooks on child component root node
+      if (isDef(i = vnode.componentInstance) && isDef(i = i._vnode) && isDef(i.data)) {
+        removeAndInvokeRemoveHook(i, rm)
+      }
+      for (i = 0; i < cbs.remove.length; ++i) {
+        cbs.remove[i](vnode, rm)
+      }
+      if (isDef(i = vnode.data.hook) && isDef(i = i.remove)) {
+        i(vnode, rm)
+      } else {
+        rm()
+      }
+    } else {
+      removeNode(vnode.elm)
+    }
+  }
+
   function insert(parent, elm, ref) {
     if (isDef(parent)) {
       if (isDef(ref)) {
@@ -182,6 +222,28 @@ export function createPatchFunction(backend: Backend): Function {
         }
       } else {
         nodeOps.appendChild(parent, elm)
+      }
+    }
+  }
+
+  function removeNode (el) {
+    const parent = nodeOps.parentNode(el)
+    // element may have already been removed due to v-html / v-text
+    if (isDef(parent)) {
+      nodeOps.removeChild(parent, el)
+    }
+  }
+
+  function removeVnodes (parentElm, vnodes, startIdx, endIdx) {
+    for (; startIdx <= endIdx; ++startIdx) {
+      const ch = vnodes[startIdx]
+      if (isDef(ch)) {
+        if (isDef(ch.tag)) {
+          removeAndInvokeRemoveHook(ch)
+          invokeDestroyHook(ch)
+        } else { // Text node
+          removeNode(ch.elm)
+        }
       }
     }
   }
@@ -308,7 +370,7 @@ export function createPatchFunction(backend: Backend): Function {
     oldVnode: VNodeInstance | any | void,
     vnode: VNodeInstance | void,
     hydrating: boolean,
-    removeOnly: boolean) {
+    removeOnly: boolean):Element {
     if (isUndef(vnode)) {
       if (isDef(oldVnode)) invokeDestroyHook(oldVnode)
       return
@@ -385,7 +447,7 @@ export function createPatchFunction(backend: Backend): Function {
               // #6513
               // invoke insert hooks that may have been merged by create hooks.
               // e.g. for directives that uses the "inserted" hook.
-              const insert = (<HookHandler>ancestor.data.hook.insert
+              const insert = (<HookHandler>ancestor.data.hook.insert)
               if (insert.merged) {
                 // start at index 1 to avoid re-invoking component mounted hook
                 for (let i = 1; i < insert.fns.length; i++) {
@@ -407,8 +469,9 @@ export function createPatchFunction(backend: Backend): Function {
         }
       }
     }
-
-    invokeInsertHook(vnode, insertedVnodeQueue, isInitialPatch)
+    
+    vnode = <VNodeInstance>vnode;
+    invokeInsertHook(<VNodeInstance>vnode, insertedVnodeQueue, isInitialPatch)
     return vnode.elm
   };
 }

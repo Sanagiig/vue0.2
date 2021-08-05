@@ -1,9 +1,5 @@
-import {
-  noop,
-  extend,
-  warn as baseWarn,
-  tip
-} from "@utils/index";
+import { noop, extend } from '@shared/util'
+import { warn as baseWarn, tip } from '@core/utils/debug'
 import { generateCodeFrame } from "./codeframe";
 
 function createFunction(code, errors):Function {

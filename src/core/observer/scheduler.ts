@@ -4,7 +4,7 @@ import {
   warn,
   nextTick,
   devtools
-} from '@utils/index'
+} from '@core/utils/index'
 import { callHook, activateChildComponent } from '../instance/lifecycle'
 
 // 同一个watcher 同一次 flushScheuler 最大的执行数

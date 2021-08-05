@@ -8,7 +8,7 @@ import {
   warn,
   formatComponentName,
   invokeWithErrorHandling
-} from '@utils/index'
+} from '@core/utils/index'
 let target: Component
 
 const normalizeEvent = cached((name: string): {

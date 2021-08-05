@@ -4,7 +4,7 @@ import { initMixin } from './mixin'
 import { initExtend } from './extend'
 import { initAssetRegisters } from './assets'
 import { set, del } from '../observer/index'
-import { ASSET_TYPES } from '@utils/index'
+import { ASSET_TYPES } from '@shared/constants'
 import builtInComponents from '../components/index'
 import { observe,defineReactive } from '@core/observer/index'
 
@@ -13,7 +13,7 @@ import {
   extend,
   nextTick,
   mergeOptions,
-} from '@utils/index'
+} from '@core/utils/index'
 
 export function initGlobalAPI(Vue: GlobalAPI) {
   // config

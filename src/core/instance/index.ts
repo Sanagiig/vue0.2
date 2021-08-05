@@ -3,7 +3,7 @@ import { stateMixin } from './state';
 import { renderMixin } from './render';
 import { eventsMixin } from './events';
 import { lifecycleMixin } from './lifecycle';
-import { warn } from "@utils/index";
+import { warn } from "@core/utils/debug";
 
 var Vue:any = function(this: Component, options: ComponentOptions) {
   if (process.env.NODE_ENV !== 'production' &&

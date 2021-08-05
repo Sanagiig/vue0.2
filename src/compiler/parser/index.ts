@@ -2,10 +2,10 @@ import { parseHTML } from './html-parser'
 import { parseText } from './text-parser'
 import { parseFilters } from './filter-parser'
 import { genAssignmentCode } from '../directives/model'
+import { isIE, isEdge, isServerRendering } from '@core/utils/env'
 import {
-  isIE,
-  isEdge, no, hasOwn, isServerRendering, extend, cached, camelize, hyphenate
-} from "@utils/index";
+  no, hasOwn, extend, cached, camelize, hyphenate
+} from "@shared/util";
 import {
   addProp,
   addAttr,

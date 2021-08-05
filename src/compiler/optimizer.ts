@@ -1,4 +1,4 @@
-import { makeMap, isBuiltInTag, cached, no } from '@utils/index';
+import { makeMap, isBuiltInTag, cached, no } from '@shared/util';
 
 let isStaticKey
 let isPlatformReservedTag

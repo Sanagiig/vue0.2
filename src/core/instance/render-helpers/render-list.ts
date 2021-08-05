@@ -1,4 +1,4 @@
-import { isObject, isDef, hasSymbol } from '@utils/index'
+import { isObject, isDef, hasSymbol } from '@core/utils/index'
 
 /**
  * Runtime helper for rendering v-for lists.

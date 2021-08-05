@@ -1,4 +1,5 @@
-import { ASSET_TYPES, isPlainObject, validateComponentName } from "@utils/index";
+import {ASSET_TYPES}from "@shared/constants"
+import { isPlainObject, validateComponentName } from '@core/utils/index'
 
 export function initAssetRegisters(Vue: GlobalAPI) {
   ASSET_TYPES.forEach(type => {

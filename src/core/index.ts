@@ -1,6 +1,6 @@
 import Vue from "./instance/index";
 import { initGlobalAPI } from "./global-api/index";
-import { isServerRendering } from '@utils/index';
+import { isServerRendering } from '@core/utils/env';
 import { FunctionalRenderContext } from '@core/vdom/create-functional-component'
 
 initGlobalAPI(Vue);

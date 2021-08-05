@@ -1,13 +1,9 @@
 import Vue from '@web/runtime/index';
-import {
-  cached,
-  query,
-  warn,
-  getOuterHTML,
-  shouldDecodeNewlines,
-  shouldDecodeNewlinesForHref
-} from '@utils/index';
+import { warn, cached } from '@core/utils/index'
+// import { mark, measure } from '@core/utils/perf'
 import { compileToFunctions } from '@web/compiler/index';
+import { query } from '@web/utils/index'
+import { shouldDecodeNewlines, shouldDecodeNewlinesForHref } from '../utils/compat'
 
 const idToTemplate = cached((id:string | Element) => {
   const el = query(id);
@@ -84,6 +80,20 @@ Vue.prototype.$mount = function (
   }
 
   return mount.call(this, el, hydrating);
+}
+
+/**
+ * Get outerHTML of elements, taking care
+ * of SVG elements in IE as well.
+ */
+ function getOuterHTML (el: Element): string {
+  if (el.outerHTML) {
+    return el.outerHTML
+  } else {
+    const container = document.createElement('div')
+    container.appendChild(el.cloneNode(true))
+    return container.innerHTML
+  }
 }
 
 Vue.compile = compileToFunctions;

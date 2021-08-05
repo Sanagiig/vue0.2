@@ -42,10 +42,12 @@ declare interface VNodeInstance {
   fnScopeId?: string; // functional scope id support
 }
 
-declare type VNodeHooks = ['create', 'activate', 'update', 'remove', 'destroy']
+declare type AnyFn = (...args:any[]) =>any
+declare type VNodeHooks = 'create'| 'insert' | 'activate' | 'update' | 'remove' | 'destroy';
 declare type HookHandler = {
   (...args:any[]):any;
   merged?:boolean;
+  fns?:AnyFn[];
 }
 declare type VNodeData = {
   key?: string | number;
@@ -62,7 +64,7 @@ declare type VNodeData = {
   props?: { [key: string]: any };
   attrs?: { [key: string]: string };
   domProps?: { [key: string]: any };
-  hook?: { [key in keyof VNodeHooks]: HookHandler};
+  hook?: { [key in VNodeHooks]: HookHandler};
   on?: { [key: string]: Function | Array<Function> };
   // mark
   init?: any;

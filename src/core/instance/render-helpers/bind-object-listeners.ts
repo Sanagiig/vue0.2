@@ -1,4 +1,4 @@
-import { warn, extend, isPlainObject } from '@utils/index'
+import { warn, extend, isPlainObject } from '@core/utils/index'
 
 export function bindObjectListeners (data: any, value: any): VNodeData {
   if (value) {

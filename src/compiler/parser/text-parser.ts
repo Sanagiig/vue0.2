@@ -1,5 +1,5 @@
 
-import { cached } from '@utils/index'
+import { cached } from '@shared/util'
 import { parseFilters } from './filter-parser'
 
 const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g;

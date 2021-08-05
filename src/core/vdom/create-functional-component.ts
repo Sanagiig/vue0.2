@@ -1,3 +1,3 @@
-export function FunctionalRenderContext(){
+export function FunctionalRenderContext(...args:any[]):any{
   
 }

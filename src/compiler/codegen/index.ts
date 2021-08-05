@@ -1,6 +1,6 @@
 import { genHandlers } from './events';
 import baseDirectives from '../directives/index';
-import { camelize, no, extend } from '@utils/index';
+import { camelize, no, extend } from '@shared/util';
 import { baseWarn, pluckModuleFunction } from '../helper'
 
 type TransformFunction = (el: ASTElement, code: string) => string;

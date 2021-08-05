@@ -1,4 +1,4 @@
-import { isFalse, isTrue, isDef, isUndef, isPrimitive } from '@utils/index'
+import { isFalse, isTrue, isDef, isUndef, isPrimitive } from '@core/utils/index'
 import {createTextVNode} from "@vdom/vnode";
 
 // The template compiler attempts to minimize the need for normalization by

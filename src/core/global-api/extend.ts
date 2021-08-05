@@ -1,6 +1,6 @@
-import { ASSET_TYPES,extend, mergeOptions, validateComponentName } from '@utils/index'
+import { ASSET_TYPES } from 'shared/constants'
 import { defineComputed, proxy } from '../instance/state'
-
+import { extend, mergeOptions, validateComponentName } from '@core/utils/index'
 export function initExtend (Vue: GlobalAPI) {
   /**
    * Each instance constructor, including Vue, has a unique

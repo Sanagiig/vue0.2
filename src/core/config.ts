@@ -1,5 +1,9 @@
-import { no, noop, identity, LIFECYCLE_HOOKS } from '@utils/index';
-
+import {
+    no,
+    noop,
+    identity
+} from '@shared/util'
+import { LIFECYCLE_HOOKS } from 'shared/constants'
 export default {
     /**
     * Option merge strategies (used in core/util/options)
@@ -10,7 +14,7 @@ export default {
         (parent: ComponentOptions,
             child: ComponentOptions | ComponentCtor,
             vm?: Component,
-            key ?:string) => any
+            key?: string) => any
     }>{},
 
     /**

@@ -1,5 +1,5 @@
 import { defineReactive, toggleObserving } from '../observer/index';
-import { hasSymbol, hasOwn, warn } from "@utils/index";
+import { hasSymbol, hasOwn, warn } from "@core/utils/index";
 
 export function initProvide(vm: Component) {
   const provide = vm.$options.provide

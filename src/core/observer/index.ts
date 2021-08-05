@@ -12,7 +12,7 @@ import {
   isUndef,
   isValidArrayIndex,
   isServerRendering
-} from "@utils/index";
+} from "@core/utils/index";
 
 const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
 

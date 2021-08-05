@@ -11,7 +11,7 @@ import {
   validateProp,
   hyphenate,
   bind
-} from "@utils/index";
+} from "@core/utils/index";
 import { observe, set, del, toggleObserving, defineReactive } from "@core/observer/index";
 import Dep from "@observer/dep";
 import Watcher from "@core/observer/watcher";

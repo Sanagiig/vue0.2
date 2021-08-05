@@ -1,5 +1,5 @@
 import VNode from '../vdom/vnode';
-import { isObject } from "@utils/index";
+import { isObject } from "@core/utils/index";
 
 const seenObjects = new Set();
 

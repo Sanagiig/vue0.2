@@ -6,7 +6,7 @@ import { initRender } from './render'
 import { initEvents } from './events'
 import { initLifecycle, callHook } from './lifecycle'
 import { initProvide, initInjections } from './inject'
-import { extend, mergeOptions, formatComponentName } from "@utils/index";
+import { extend, mergeOptions, formatComponentName } from "@core/utils/index";
 
 let uid = 0;
 export function initMixin(Vue: ComponentCtor) {

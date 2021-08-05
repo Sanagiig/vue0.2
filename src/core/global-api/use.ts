@@ -1,4 +1,4 @@
-import { toArray } from "@utils/index"
+import { toArray } from "@shared/util"
 
 export function initUse (Vue: GlobalAPI) {
   // 注册插件，arguments.unshif(this) 作为install 参数

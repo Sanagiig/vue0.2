@@ -1,4 +1,4 @@
-import { toString, toNumber, looseEqual, looseIndexOf } from "@utils/index";
+import { toString, toNumber, looseEqual, looseIndexOf } from "@shared/util";
 import { resolveFilter } from './resolve-filter';
 import { bindObjectListeners } from './bind-object-listeners'
 import { bindObjectProps } from './bind-object-props'

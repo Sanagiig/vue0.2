@@ -1,9 +1,8 @@
-import { isPrimitive, isTrue, isDef,isUndef,isObject,warn } from '@utils/index';
+import { isPrimitive, isTrue, isDef,isUndef,isObject,warn,resolveAsset } from '@core/utils/index';
 import VNode,{ createEmptyVNode } from '@core/vdom/vnode';
 import config from '@config/index';
 import { createComponent } from './create-component';
 import { traverse } from '@core/observer/traverse';
-import { resolveAsset } from '@utils/index';
 
 import {
   normalizeChildren,

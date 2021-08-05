@@ -1,5 +1,5 @@
 
-import { mergeOptions } from "@utils/index";
+import { mergeOptions } from "@core/utils/options";
 
 export function initMixin (Vue: GlobalAPI) {
   Vue.mixin = function (mixin: ComponentOptions) {

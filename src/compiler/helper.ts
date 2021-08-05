@@ -1,4 +1,4 @@
-import { emptyObject } from "@utils/index";
+import { emptyObject } from '@shared/util'
 import { parseFilters } from './parser/filter-parser'
 
 type Range = { start?: number, end?: number };

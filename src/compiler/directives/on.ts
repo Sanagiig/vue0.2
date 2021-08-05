@@ -1,5 +1,5 @@
 
-import { warn } from '@utils/index'
+import { warn } from '@core/utils/debug'
 
 // v-on = obj
 export default function on (el: ASTElement, dir: ASTDirective) {

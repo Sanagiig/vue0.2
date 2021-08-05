@@ -1,5 +1,5 @@
 import Dep, { pushTarget, popTarget } from './dep';
-import { noop, warn, parsePath, handleError, isObject, remove } from "@utils/index";
+import { noop, warn, parsePath, handleError, isObject, remove } from "@core/utils/index";
 import { traverse } from "./traverse";
 import { queueWatcher } from "./scheduler"
 let uid = 0

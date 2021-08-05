@@ -1,4 +1,4 @@
-import { extend, warn, isObject } from '@utils/index'
+import { extend, warn, isObject } from '@core/utils/index'
 
 /**
  * Runtime helper for rendering <slot>

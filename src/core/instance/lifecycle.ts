@@ -1,6 +1,6 @@
 import config from "@config/index";
 import { pushTarget, popTarget } from "@core/observer/dep";
-import { invokeWithErrorHandling, warn, noop,remove } from "@utils/index";
+import { invokeWithErrorHandling, warn, noop,remove } from "@core/utils/index";
 import { createEmptyVNode } from "@vdom/vnode";
 import Watcher from "@observer/watcher"
 

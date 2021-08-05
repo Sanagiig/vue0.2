@@ -1,5 +1,5 @@
 import { defineReactive } from "@core/observer/index";
-import { nextTick, handleError, warn,emptyObject } from "@utils/index";
+import { nextTick, handleError, warn,emptyObject } from "@core/utils/index";
 import VNode, { createEmptyVNode } from "@vdom/vnode";
 import { createElement } from '../vdom/create-element';
 import { resolveSlots } from './render-helpers/resolve-slots'

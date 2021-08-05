@@ -1,4 +1,4 @@
-import { identity, resolveAsset } from '@utils/index'
+import { identity, resolveAsset } from '@core/utils/index'
 /**
  * Runtime helper for resolving filters
  */

@@ -150,7 +150,7 @@ export function hasOwn (obj: any, key: string): boolean {
 /**
  * Create a cached version of a pure function.
  */
-type Fn = (arg: string) => any
+type Fn = (arg: any) => any
 export function cached(fn: Fn): Fn {
   const cache = Object.create(null)
   return (function cachedFn (str: string): any {

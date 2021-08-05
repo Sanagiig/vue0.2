@@ -1,6 +1,4 @@
-import {
-  extend,
-} from "@utils/index";
+import { extend } from '@shared/util'
 import { detectErrors } from "./error-detector";
 import { createCompileToFunctionFn } from "./to-function";
 

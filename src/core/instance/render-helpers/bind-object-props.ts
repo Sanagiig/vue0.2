@@ -8,7 +8,7 @@ import {
   toObject,
   isReservedAttribute,
   camelize
-} from '@utils/index'
+} from '@core/utils/index'
 
 /**
  * Runtime helper for merging v-bind="object" into a VNode's data.

@@ -1,6 +1,6 @@
 import on from './on'
 import bind from './bind'
-import { noop } from '@utils/index'
+import { noop } from '@shared/util'
 
 export default {
   on,
