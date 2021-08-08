@@ -3,7 +3,7 @@ import {
     noop,
     identity
 } from '@shared/util'
-import { LIFECYCLE_HOOKS } from 'shared/constants'
+import { LIFECYCLE_HOOKS } from '@shared/constants'
 export default {
     /**
     * Option merge strategies (used in core/util/options)
@@ -14,7 +14,7 @@ export default {
         (parent: ComponentOptions,
             child: ComponentOptions | ComponentCtor,
             vm?: Component,
-            key?: string) => any
+            key?: string | number) => any
     }>{},
 
     /**

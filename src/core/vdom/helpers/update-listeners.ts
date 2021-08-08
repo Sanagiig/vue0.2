@@ -9,7 +9,7 @@ import {
   isUndef,
   isTrue,
   isPlainObject
-} from 'shared/util'
+} from '@shared/util'
 
 const normalizeEvent = cached((name: string): {
   name: string,

@@ -65,6 +65,7 @@ export function initMixin(Vue: ComponentCtor) {
     // }
 
     if (vm.$options.el) {
+      console.log("vm",vm)
       vm.$mount(vm.$options.el)
     }
   }

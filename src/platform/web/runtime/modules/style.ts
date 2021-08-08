@@ -1,7 +1,7 @@
 /* @flow */
 
 import { getStyle, normalizeStyleBinding } from '@web/utils/style'
-import { cached, camelize, extend, isDef, isUndef } from 'shared/util'
+import { cached, camelize, extend, isDef, isUndef } from '@shared/util'
 
 const cssVarRE = /^--/
 const importantRE = /\s*!important$/

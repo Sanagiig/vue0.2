@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.Vvue = factory());
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Vvue = factory());
 }(this, (function () { 'use strict';
 
   /* @flow */
@@ -59,16 +59,6 @@
       return (isDef(val) &&
           typeof val.then === 'function' &&
           typeof val.catch === 'function');
-  }
-  /**
-   * Convert a value to a string that is actually rendered.
-   */
-  function toString(val) {
-      return val == null
-          ? ''
-          : Array.isArray(val) || (isPlainObject(val) && val.toString === _toString)
-              ? JSON.stringify(val, null, 2)
-              : String(val);
   }
   /**
    * Convert an input value to a number for persistence.
@@ -192,18 +182,6 @@
       }
       return to;
   }
-  /**
-   * Merge an Array of Objects into a single Object.
-   */
-  function toObject(arr) {
-      var res = {};
-      for (var i = 0; i < arr.length; i++) {
-          if (arr[i]) {
-              extend(res, arr[i]);
-          }
-      }
-      return res;
-  }
   /* eslint-disable no-unused-vars */
   /**
    * Perform no operation.
@@ -227,63 +205,6 @@
       return modules.reduce(function (keys, m) {
           return keys.concat(m.staticKeys || []);
       }, []).join(',');
-  }
-  /**
-   * Check if two values are loosely equal - that is,
-   * if they are plain objects, do they have the same shape?
-   */
-  function looseEqual(a, b) {
-      if (a === b)
-          return true;
-      var isObjectA = isObject(a);
-      var isObjectB = isObject(b);
-      if (isObjectA && isObjectB) {
-          try {
-              var isArrayA = Array.isArray(a);
-              var isArrayB = Array.isArray(b);
-              if (isArrayA && isArrayB) {
-                  return a.length === b.length && a.every(function (e, i) {
-                      return looseEqual(e, b[i]);
-                  });
-              }
-              else if (a instanceof Date && b instanceof Date) {
-                  return a.getTime() === b.getTime();
-              }
-              else if (!isArrayA && !isArrayB) {
-                  var keysA = Object.keys(a);
-                  var keysB = Object.keys(b);
-                  return keysA.length === keysB.length && keysA.every(function (key) {
-                      return looseEqual(a[key], b[key]);
-                  });
-              }
-              else {
-                  /* istanbul ignore next */
-                  return false;
-              }
-          }
-          catch (e) {
-              /* istanbul ignore next */
-              return false;
-          }
-      }
-      else if (!isObjectA && !isObjectB) {
-          return String(a) === String(b);
-      }
-      else {
-          return false;
-      }
-  }
-  /**
-   * Return the first index at which a loosely equal value can be
-   * found in the array (if value is a plain object, the array must
-   * contain an object of the same shape), or -1 if it is not present.
-   */
-  function looseIndexOf(arr, val) {
-      for (var i = 0; i < arr.length; i++) {
-          if (looseEqual(arr[i], val))
-              return i;
-      }
-      return -1;
   }
 
   // xml
@@ -1889,6 +1810,7 @@
   }
   function mountComponent(vm, el, hydrating) {
       vm.$el = el;
+      vm.$el = el;
       if (!vm.$options.render) {
           vm.$options.render = createEmptyVNode;
           {
@@ -1928,7 +1850,6 @@
       //   }
       // }
       updateComponent = function () {
-          console.log("updateComponent");
           vm._update(vm._render(), hydrating);
       };
       // we set this to vm._watcher inside the watcher's constructor
@@ -2976,256 +2897,10 @@
   function isWhitespace(node) {
       return (node.isComment && !node.asyncFactory) || node.text === ' ';
   }
-  function resolveScopedSlots(fns, // see flow/vnode
-  res) {
-      res = res || {};
-      for (var i = 0; i < fns.length; i++) {
-          var slot = fns[i];
-          if (Array.isArray(slot)) {
-              resolveScopedSlots(slot, res);
-          }
-          else {
-              res[slot.key] = slot.fn;
-          }
-      }
-      return res;
-  }
-
-  /**
-   * Runtime helper for resolving filters
-   */
-  function resolveFilter(id) {
-      return resolveAsset(this.$options, 'filters', id, true) || identity;
-  }
-
-  function bindObjectListeners(data, value) {
-      if (value) {
-          if (!isPlainObject(value)) {
-               warn('v-on without argument expects an Object value', this);
-          }
-          else {
-              var on = data.on = data.on ? extend({}, data.on) : {};
-              for (var key in value) {
-                  var existing = on[key];
-                  var ours = value[key];
-                  on[key] = existing ? [].concat(existing, ours) : ours;
-              }
-          }
-      }
-      return data;
-  }
-
-  /* @flow */
-  /**
-   * Runtime helper for merging v-bind="object" into a VNode's data.
-   */
-  // 完整处理 v-bind.prop.sync = {key:value}
-  // 添加到对应的 data[domProps || attrs] 中 
-  // 对 .sync 组件的 on 进行 on['update${camelizedKey}'] = $event => value[key] = $event
-  function bindObjectProps(data, tag, value, asProp, isSync) {
-      if (value) {
-          if (!isObject(value)) {
-               warn('v-bind without argument expects an Object or Array value', this);
-          }
-          else {
-              if (Array.isArray(value)) {
-                  value = toObject(value);
-              }
-              var hash = void 0;
-              var _loop_1 = function (key) {
-                  if (key === 'class' ||
-                      key === 'style' ||
-                      isReservedAttribute(key)) {
-                      hash = data;
-                  }
-                  else {
-                      var type = data.attrs && data.attrs.type;
-                      hash = asProp || config.mustUseProp(tag, type, key)
-                          ? data.domProps || (data.domProps = {})
-                          : data.attrs || (data.attrs = {});
-                  }
-                  var camelizedKey = camelize(key);
-                  if (!(key in hash) && !(camelizedKey in hash)) {
-                      hash[key] = value[key];
-                      if (isSync) {
-                          var on = data.on || (data.on = {});
-                          on["update:" + camelizedKey] = function ($event) {
-                              value[key] = $event;
-                          };
-                      }
-                  }
-              };
-              for (var key in value) {
-                  _loop_1(key);
-              }
-          }
-      }
-      return data;
-  }
-
-  /**
-   * Runtime helper for rendering static trees.
-   */
-  // 从 $options.staticRenderFns 去除静态节点渲染，并记录
-  // 并为该VnodeInstance 添加 __static__${index}  || __once__${index}_${key}
-  function renderStatic(index, isInFor) {
-      var cached = this._staticTrees || (this._staticTrees = []);
-      var tree = cached[index];
-      // if has already-rendered static tree and not inside v-for,
-      // we can reuse the same tree.
-      if (tree && !isInFor) {
-          return tree;
-      }
-      // otherwise, render a fresh tree.
-      tree = cached[index] = this.$options.staticRenderFns[index].call(this._renderProxy, null, this // for render fns generated for functional component templates
-      );
-      markStatic(tree, "__static__" + index, false);
-      return tree;
-  }
-  /**
-   * Runtime helper for v-once.
-   * Effectively it means marking the node as static with a unique key.
-   */
-  function markOnce(tree, index, key) {
-      markStatic(tree, "__once__" + index + (key ? "_" + key : ""), true);
-      return tree;
-  }
-  function markStatic(tree, key, isOnce) {
-      if (Array.isArray(tree)) {
-          for (var i = 0; i < tree.length; i++) {
-              if (tree[i] && typeof tree[i] !== 'string') {
-                  markStaticNode(tree[i], key + "_" + i, isOnce);
-              }
-          }
-      }
-      else {
-          markStaticNode(tree, key, isOnce);
-      }
-  }
-  function markStaticNode(node, key, isOnce) {
-      node.isStatic = true;
-      node.key = key;
-      node.isOnce = isOnce;
-  }
-
-  /**
-   * Runtime helper for rendering v-for lists.
-   */
-  function renderList(val, render) {
-      var ret, i, l, keys, key;
-      if (Array.isArray(val) || typeof val === 'string') {
-          ret = new Array(val.length);
-          for (i = 0, l = val.length; i < l; i++) {
-              ret[i] = render(val[i], i);
-          }
-      }
-      else if (typeof val === 'number') {
-          ret = new Array(val);
-          for (i = 0; i < val; i++) {
-              ret[i] = render(i + 1, i);
-          }
-      }
-      else if (isObject(val)) {
-          if (hasSymbol && val[Symbol.iterator]) {
-              ret = [];
-              var iterator = val[Symbol.iterator]();
-              var result = iterator.next();
-              while (!result.done) {
-                  ret.push(render(result.value, ret.length));
-                  result = iterator.next();
-              }
-          }
-          else {
-              keys = Object.keys(val);
-              ret = new Array(keys.length);
-              for (i = 0, l = keys.length; i < l; i++) {
-                  key = keys[i];
-                  ret[i] = render(val[key], key, i);
-              }
-          }
-      }
-      if (!isDef(ret)) {
-          ret = [];
-      }
-      ret._isVList = true;
-      return ret;
-  }
-
-  /**
-   * Runtime helper for rendering <slot>
-   */
-  function renderSlot(name, fallback, props, bindObject) {
-      var scopedSlotFn = this.$scopedSlots[name];
-      var nodes;
-      if (scopedSlotFn) { // scoped slot
-          props = props || {};
-          if (bindObject) {
-              if ( !isObject(bindObject)) {
-                  warn('slot v-bind without argument expects an Object', this);
-              }
-              props = extend(extend({}, bindObject), props);
-          }
-          nodes = scopedSlotFn(props) || fallback;
-      }
-      else {
-          nodes = this.$slots[name] || fallback;
-      }
-      var target = props && props.slot;
-      if (target) {
-          return this.$createElement('template', { slot: target }, nodes);
-      }
-      else {
-          return nodes;
-      }
-  }
-
-  function isKeyNotMatch(expect, actual) {
-      if (Array.isArray(expect)) {
-          return expect.indexOf(actual) === -1;
-      }
-      else {
-          return expect !== actual;
-      }
-  }
-  /**
-   * Runtime helper for checking keyCodes from config.
-   * exposed as Vue.prototype._k
-   * passing in eventKeyName as last argument separately for backwards compat
-   */
-  function checkKeyCodes(eventKeyCode, key, builtInKeyCode, eventKeyName, builtInKeyName) {
-      var mappedKeyCode = config.keyCodes[key] || builtInKeyCode;
-      if (builtInKeyName && eventKeyName && !config.keyCodes[key]) {
-          return isKeyNotMatch(builtInKeyName, eventKeyName);
-      }
-      else if (mappedKeyCode) {
-          return isKeyNotMatch(mappedKeyCode, eventKeyCode);
-      }
-      else if (eventKeyName) {
-          return hyphenate(eventKeyName) !== key;
-      }
-  }
-
-  function installRenderHelpers(target) {
-      target._o = markOnce;
-      target._n = toNumber;
-      target._f = resolveFilter;
-      target._s = toString;
-      target._g = bindObjectListeners;
-      target._b = bindObjectProps;
-      target._m = renderStatic;
-      target._l = renderList;
-      target._e = createEmptyVNode;
-      target._v = createTextVNode;
-      target._t = renderSlot;
-      target._k = checkKeyCodes;
-      target._i = looseIndexOf;
-      target._q = looseEqual;
-      target._u = resolveScopedSlots;
-  }
 
   function renderMixin(Vue) {
       // install runtime convenience helpers
-      installRenderHelpers(Vue.prototype);
+      // installRenderHelpers(Vue.prototype)
       Vue.prototype.$nextTick = function (fn) {
           return nextTick(fn, this);
       };
@@ -3622,7 +3297,6 @@
           !(this instanceof Vue)) {
           warn('Vue is a constructor and should be called with the `new` keyword');
       }
-      console.log("init");
       this._init(options);
   };
   initMixin(Vue);
@@ -3958,7 +3632,7 @@
   /**
    * Merge an Array of Objects into a single Object.
    */
-  function toObject$1(arr) {
+  function toObject(arr) {
       var res = {};
       for (var i = 0; i < arr.length; i++) {
           if (arr[i]) {
@@ -4145,6 +3819,7 @@
       });
   }
   else if (typeof setImmediate !== 'undefined' && isNative$1(setImmediate)) ;
+  else ;
 
   var directive = {
       inserted: function (el, binding, vnode, oldVnode) {
@@ -4665,8 +4340,6 @@
               }
           }
       }
-      function addVnodes(parentElm, refElm, vnodes, startIdx, endIdx, insertedVnodeQueue) {
-      }
       function removeNode(el) {
           var parent = nodeOps.parentNode(el);
           // element may have already been removed due to v-html / v-text
@@ -4771,98 +4444,22 @@
               insert(parentElm, vnode.elm, refElm);
           }
       }
-      // Note: this is a browser-only function so we can assume elms are DOM nodes.
-      function hydrate(elm, vnode, insertedVnodeQueue, inVPre) {
-          return false;
-      }
-      function patchVnode(oldVnode, vnode, insertedVnodeQueue, ownerArray, index, removeOnly) {
-          if (oldVnode === vnode) {
-              return;
-          }
-          if (isDef(vnode.elm) && isDef(ownerArray)) {
-              // clone reused vnode
-              vnode = ownerArray[index] = cloneVNode(vnode);
-          }
-          var elm = vnode.elm = oldVnode.elm;
-          if (isTrue(oldVnode.isAsyncPlaceholder)) {
-              if (isDef(vnode.asyncFactory.resolved)) {
-                  hydrate(oldVnode.elm);
-              }
-              else {
-                  vnode.isAsyncPlaceholder = true;
-              }
-              return;
-          }
-          // reuse element for static trees.
-          // note we only do this if the vnode is cloned -
-          // if the new node is not cloned it means the render functions have been
-          // reset by the hot-reload-api and we need to do a proper re-render.
-          if (isTrue(vnode.isStatic) &&
-              isTrue(oldVnode.isStatic) &&
-              vnode.key === oldVnode.key &&
-              (isTrue(vnode.isCloned) || isTrue(vnode.isOnce))) {
-              vnode.componentInstance = oldVnode.componentInstance;
-              return;
-          }
-          var i;
-          var data = vnode.data;
-          if (isDef(data) && isDef(i = data.hook) && isDef(i = i.prepatch)) {
-              i(oldVnode, vnode);
-          }
-          var oldCh = oldVnode.children;
-          var ch = vnode.children;
-          if (isDef(data) && isPatchable(vnode)) {
-              for (i = 0; i < cbs.update.length; ++i)
-                  cbs.update[i](oldVnode, vnode);
-              if (isDef(i = data.hook) && isDef(i = i.update))
-                  i(oldVnode, vnode);
-          }
-          if (isUndef(vnode.text)) {
-              if (isDef(oldCh) && isDef(ch)) ;
-              else if (isDef(ch)) {
-                  {
-                      checkDuplicateKeys(ch);
-                  }
-                  if (isDef(oldVnode.text))
-                      nodeOps.setTextContent(elm, '');
-                  addVnodes(elm, null, ch, 0, ch.length - 1);
-              }
-              else if (isDef(oldCh)) {
-                  removeVnodes(elm, oldCh, 0, oldCh.length - 1);
-              }
-              else if (isDef(oldVnode.text)) {
-                  nodeOps.setTextContent(elm, '');
-              }
-          }
-          else if (oldVnode.text !== vnode.text) {
-              nodeOps.setTextContent(elm, vnode.text);
-          }
-          if (isDef(data)) {
-              if (isDef(i = data.hook) && isDef(i = i.postpatch))
-                  i(oldVnode, vnode);
-          }
-      }
       return function patch(oldVnode, vnode, hydrating, removeOnly) {
           if (isUndef(vnode)) {
               if (isDef(oldVnode))
                   invokeDestroyHook(oldVnode);
               return;
           }
-          console.log("patch", arguments);
           var isInitialPatch = false;
           var insertedVnodeQueue = [];
           if (isUndef(oldVnode)) {
               // empty mount (likely as component), create new root element
-              console.log("isUndef(oldVnode)", oldVnode);
               isInitialPatch = true;
               createElm(vnode, insertedVnodeQueue);
           }
           else {
               var isRealElement = isDef(oldVnode.nodeType);
-              if (!isRealElement && sameVnode(oldVnode, vnode)) {
-                  // patch existing root node
-                  patchVnode(oldVnode, vnode, insertedVnodeQueue, null, null);
-              }
+              if (!isRealElement && sameVnode(oldVnode, vnode)) ;
               else {
                   if (isRealElement) {
                       // mounting to a real element
@@ -4937,7 +4534,6 @@
           }
           vnode = vnode;
           invokeInsertHook(vnode, insertedVnodeQueue, isInitialPatch);
-          console.log("patch vnode", vnode);
           return vnode.elm;
       };
   }
@@ -5895,7 +5491,7 @@
   // normalize possible array / string values into Object
   function normalizeStyleBinding(bindingStyle) {
       if (Array.isArray(bindingStyle)) {
-          return toObject$1(bindingStyle);
+          return toObject(bindingStyle);
       }
       if (typeof bindingStyle === 'string') {
           return parseStyleText(bindingStyle);
@@ -6012,12 +5608,27 @@
       update: updateStyle
   };
 
+  function _enter(_, vnode) {
+  }
+  var transition = inBrowser$1 ? {
+      create: _enter,
+      activate: _enter,
+      remove: function (vnode, rm) {
+          /* istanbul ignore else */
+          if (vnode.data.show !== true) ;
+          else {
+              rm();
+          }
+      }
+  } : {};
+
   var platformModules = [
       attrs,
       klass,
       events,
       domProps,
       style,
+      transition
   ];
 
   // the directive module should be applied last, after all
@@ -7325,7 +6936,7 @@
       isStaticKey = genStaticKeysCached(options.staticKeys || '');
       isPlatformReservedTag = options.isReservedTag || no;
       // first pass: mark all non-static nodes.
-      markStatic$1(root);
+      markStatic(root);
       // second pass: mark static roots.
       markStaticRoots(root, false);
   }
@@ -7334,7 +6945,7 @@
           (keys ? ',' + keys : ''));
   }
   // 确定当前节点是否 static , 如果子节点非 static,父节点也会更新 
-  function markStatic$1(node) {
+  function markStatic(node) {
       node.static = isStatic(node);
       if (node.type === 1) {
           // do not make component slot content static. this avoids
@@ -7348,7 +6959,7 @@
           }
           for (var i = 0, l = node.children.length; i < l; i++) {
               var child = node.children[i];
-              markStatic$1(child);
+              markStatic(child);
               if (!child.static) {
                   node.static = false;
               }
@@ -7356,7 +6967,7 @@
           if (node.ifConditions) {
               for (var i = 1, l = node.ifConditions.length; i < l; i++) {
                   var block = node.ifConditions[i].block;
-                  markStatic$1(block);
+                  markStatic(block);
                   if (!block.static) {
                       node.static = false;
                   }
@@ -8151,7 +7762,7 @@
       return {
           ast: ast,
           render: code.render,
-          staticRenderFns: code.staticRenderFns
+          staticRenderFns: []
       };
   });
 

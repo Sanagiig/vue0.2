@@ -1,4 +1,4 @@
-import config from 'core/config';
+import config from '@core/config';
 import { hyphenate } from '@shared/util';
 
 function isKeyNotMatch<T> (expect: T | Array<T>, actual: T): boolean {

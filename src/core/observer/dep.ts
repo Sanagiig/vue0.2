@@ -1,4 +1,4 @@
-import { remove } from "@core/utils/index";
+import { remove } from "@shared/util";
 import config from "@core/config";
 let uid = 0
 

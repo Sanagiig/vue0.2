@@ -4,7 +4,7 @@ import {
   isReservedTag,
   getTagNamespace
 } from '../utils/index'
-import { genStaticKeys } from 'shared/util'
+import { genStaticKeys } from '@shared/util'
 import { isUnaryTag, canBeLeftOpenTag } from './util'
 
 import modules from './modules/index'

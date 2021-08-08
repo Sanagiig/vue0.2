@@ -18,7 +18,7 @@ export const createCompiler = createCompilerCreator(function baseCompile(
   console.log("code",code)
   return {
     ast,
-    render:'',
-    staticRenderFns:[]
+    render:code.render,
+    staticRenderFns:code.staticRenderFns
   }
 })

@@ -1,7 +1,7 @@
 /* @flow */
 
 import { inBrowser } from '@core/utils/env'
-import { makeMap } from 'shared/util'
+import { makeMap } from '@shared/util'
 
 export const namespaceMap = {
   svg: 'http://www.w3.org/2000/svg',

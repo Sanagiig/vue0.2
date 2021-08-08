@@ -4,9 +4,10 @@ import VNode, { createEmptyVNode } from "@vdom/vnode";
 import { createElement } from '../vdom/create-element';
 import { resolveSlots } from './render-helpers/resolve-slots'
 import { isUpdatingChildComponent } from './lifecycle'
+import {installRenderHelpers} from "@core/instance/render-helpers/index"
 export function renderMixin(Vue: ComponentCtor) {
   // install runtime convenience helpers
-  // installRenderHelpers(Vue.prototype)
+  installRenderHelpers(Vue.prototype)
 
   Vue.prototype.$nextTick = function (fn: Function) {
     return nextTick(fn, this)

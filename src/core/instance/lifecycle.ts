@@ -134,7 +134,6 @@ export function mountComponent(
   hydrating?: boolean
 ): Component {
   vm.$el = el;
-  vm.$el = el
   if (!vm.$options.render) {
     vm.$options.render = <OptionRender>createEmptyVNode;
     if (process.env.NODE_ENV !== 'production') {
@@ -181,6 +180,7 @@ export function mountComponent(
   //   }
   // }
   updateComponent = () => {
+    console.log("updateComponent")
     vm._update(vm._render(), hydrating)
   }
 

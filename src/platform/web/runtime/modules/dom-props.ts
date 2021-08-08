@@ -1,6 +1,6 @@
 /* @flow */
 
-import { isDef, isUndef, extend, toNumber } from 'shared/util'
+import { isDef, isUndef, extend, toNumber } from '@shared/util'
 import { isSVG } from '@web/utils/index'
 
 let svgContainer

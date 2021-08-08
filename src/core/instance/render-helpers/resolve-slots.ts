@@ -1,4 +1,4 @@
-import type VNode from 'core/vdom/vnode'
+import type VNode from '@core/vdom/vnode'
 
 /**
  * Runtime helper for resolving raw children VNodes into a slot object.

@@ -49,7 +49,7 @@ export function createCompileToFunctionFn(compile: Function): Function {
 
     // compile
     const compiled = compile(template, options)
-
+    console.log("compiled",compiled)
     // check compilation errors/tips
     if (process.env.NODE_ENV !== 'production') {
       if (compiled.errors && compiled.errors.length) {
@@ -85,5 +85,21 @@ export function createCompileToFunctionFn(compile: Function): Function {
     res.staticRenderFns = compiled.staticRenderFns.map(code => {
       return createFunction(code, fnGenErrors)
     })
+
+    // check function generation errors.
+    // this should only happen if there is a bug in the compiler itself.
+    // mostly for codegen development use
+    /* istanbul ignore if */
+    if (process.env.NODE_ENV !== 'production') {
+      if ((!compiled.errors || !compiled.errors.length) && fnGenErrors.length) {
+        warn(
+          `Failed to generate render function:\n\n` +
+          fnGenErrors.map(({ err, code }) => `${err.toString()} in\n\n${code}\n`).join('\n'),
+          vm
+        )
+      }
+    }
+
+    return (cache[key] = res)
   }
 }

@@ -9,13 +9,13 @@ import {
   hyphenate,
   capitalize,
   isPlainObject
-} from 'shared/util'
+} from '@shared/util'
 
 type PropOptions = {
   type: Function | Array<Function> | null,
   default: any,
-  required: ?boolean,
-  validator: ?Function
+  required?: boolean,
+  validator?: Function
 };
 
 export function validateProp (
@@ -51,6 +51,7 @@ export function validateProp (
     observe(value)
     toggleObserving(prevShouldObserve)
   }
+  const __WEEX__ = false;
   if (
     process.env.NODE_ENV !== 'production' &&
     // skip validation for weex recycle-list child component props
@@ -64,7 +65,7 @@ export function validateProp (
 /**
  * Get the default value of a prop.
  */
-function getPropDefaultValue (vm: ?Component, prop: PropOptions, key: string): any {
+function getPropDefaultValue (vm: Component, prop: PropOptions, key: string): any {
   // no default, return undefined
   if (!hasOwn(prop, 'default')) {
     return undefined
@@ -101,7 +102,7 @@ function assertProp (
   prop: PropOptions,
   name: string,
   value: any,
-  vm: ?Component,
+  vm: Component | void,
   absent: boolean
 ) {
   if (prop.required && absent) {
@@ -114,7 +115,7 @@ function assertProp (
   if (value == null && !prop.required) {
     return
   }
-  let type = prop.type
+  let type:any = prop.type
   let valid = !type || type === true
   const expectedTypes = []
   if (type) {

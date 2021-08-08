@@ -1,4 +1,4 @@
-import { ASSET_TYPES } from 'shared/constants'
+import { ASSET_TYPES } from '@shared/constants'
 import { defineComputed, proxy } from '../instance/state'
 import { extend, mergeOptions, validateComponentName } from '@core/utils/index'
 export function initExtend (Vue: GlobalAPI) {

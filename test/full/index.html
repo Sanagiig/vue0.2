@@ -2,68 +2,100 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #static,
+        #static2 {
+            height: 20px;
+        }
+        
+        .cls {
+            background-color: aqua;
+        }
+        
+        div {
+            background-color: yellow;
+        }
+    </style>
 </head>
 
 <body>
-  <div id="app">
-    <div id="static">
-      <div></div>
-      <div></div>
+    <div id="app">
+        <div id="static" :style="sty">
+            <div></div>
+            <div></div>
+        </div>
+        <div id="static2" :class="dnyCls">
+            <div></div>
+            <div></div>
+        </div>
+        <!-- <div is="comp" :num="num" class="xx" :class="dnyCls" style="background-color: red;">
+            <div slot-scope="xx">
+                <h1>{{xx.x}}</h1>
+            </div>
+            <div>slot</div>
+            <div slot="comp_slot"></div>
+        </div> -->
+        <div>
+            {{title}} sel: {{selVal}}
+        </div>
+        <div v-if="ifexp == 10"></div>
+        <div v-else-if="ifexp == 11"></div>
+        <div v-else-if="ifexp == 12"></div>
+        <div v-else-if="ifexp == 13"></div>
+        <div v-else></div>
+        <select name="sel" id="sel" :value="selVal">
+            <option v-for="(item,i) in list" :value="item">{{"label" + i}}</option>
+        </select>
+        <h1>count:{{count}}</h1>
+        <button @click="handleClick">count add</button>
+        <slot name="test_slot"></slot>
+        <slot name="test_slot"></slot>
+        <div class="time">{{time}}</div>
     </div>
-    <div id="static2">
-      <div></div>
-      <div></div>
-    </div>
-    <div is="comp" :num="num" class="xx" :class="dnyCls" style="background-color: red;">
-      <div slot-scope="xx">
-        <h1>{{xx.x}}</h1>
-      </div>
-      <div>slot</div>
-      <div slot="comp_slot"></div>
-    </div>
-    <div>
-      {{title}}
-    </div>
-    <div>{{$slot.default}}</div>
-    <div v-if="ifexp == 10"></div>
-    <div v-else-if="ifexp == 11"></div>
-    <div v-else-if="ifexp == 12"></div>
-    <div v-else-if="ifexp == 13"></div>
-    <div v-else></div>
-    <select name="sel" id="sel">
-      <option v-for="(item,i) in list" :value="item">{{"label" + i}}</option>
-    </select>
-    <slot name="test_slot"></slot>
-    <slot name="test_slot"></slot>
-  </div>
-  <script src="./dist.js"></script>
-  <script>
-    let v = new Vvue({
-      el: "#app",
-      data() {
-        return {
-          num: 12,
-          title: "title",
-          list: [1, 2, 3, 4],
-          ifexp: "123",
-          dnyCls: {
-            "cls": true
-          }
-        }
-      }
-    })
-    console.log("v", v)
-    document.addEventListener("load", e => {
-      console.log("v", v)
-      let v = new Vvue({
-        el: "#app"
-      })
-      console.log("v", v)
-    })
-  </script>
+    <script src="./dist.js"></script>
+    <script>
+        let v = new Vvue({
+            el: "#app",
+            data() {
+                return {
+                    num: 12,
+                    title: "title",
+                    list: [1, 2, 3, 4],
+                    ifexp: "123",
+                    dnyCls: {
+                        "cls": false
+                    },
+                    sty: {
+                        background: "red"
+                    },
+                    selVal: "",
+                    time: "",
+                    count: 0,
+                }
+            },
+            methods: {
+                handleClick() {
+                    this.count++;
+                }
+            },
+            created() {
+                // setInterval(_ => {
+                this.time = new Date()
+                    // }, 1000)
+            }
+        })
+        console.log("v", v)
+        document.addEventListener("load", e => {
+            console.log("v", v)
+            let v = new Vvue({
+                el: "#app"
+            })
+            console.log("v", v)
+        })
+    </script>
 </body>
 
 </html>

@@ -1,9 +1,9 @@
 /* @flow */
 
-import { isDef, isUndef } from 'shared/util'
-import { updateListeners } from 'core/vdom/helpers/index'
+import { isDef, isUndef } from '@shared/util'
+import { updateListeners } from '@core/vdom/helpers/index'
 import { isIE, isChrome, supportsPassive } from '@core/utils/index'
-import { RANGE_TOKEN, CHECKBOX_RADIO_TOKEN } from 'web/compiler/directives/model'
+import { RANGE_TOKEN, CHECKBOX_RADIO_TOKEN } from '@web/compiler/directives/model'
 
 // normalize v-model event tokens that can only be determined at runtime.
 // it's important to place the event as the first in the array because

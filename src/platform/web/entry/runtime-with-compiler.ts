@@ -60,7 +60,7 @@ Vue.prototype.$mount = function (
       // if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
       //   mark('compile')
       // }
-
+      console.log("compileToFunctions",template,compileToFunctions)
       const { render, staticRenderFns } = compileToFunctions(template, {
         outputSourceRange: process.env.NODE_ENV !== 'production',
         shouldDecodeNewlines,
@@ -68,6 +68,7 @@ Vue.prototype.$mount = function (
         delimiters: options.delimiters,
         comments: options.comments
       }, this)
+      console.log("render",render,staticRenderFns,render.toLocaleString ())
       options.render = render
       options.staticRenderFns = staticRenderFns
 

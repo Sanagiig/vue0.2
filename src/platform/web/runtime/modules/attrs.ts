@@ -6,7 +6,7 @@ import {
   extend,
   isDef,
   isUndef
-} from 'shared/util'
+} from '@shared/util'
 
 import {
   isXlink,

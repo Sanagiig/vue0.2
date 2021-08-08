@@ -1,6 +1,6 @@
 /* @flow */
 
-import config from 'core/config'
+import config from '@core/config'
 
 import {
   warn,
